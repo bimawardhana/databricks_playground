@@ -1,8 +1,4 @@
 # Databricks notebook source
-dbutils.widgets.text("unique_email_data_path", "")
-
-# COMMAND ----------
-
 # MAGIC %run "/marketing_tech/COMMON LIB/Read Google Sheet"
 
 # COMMAND ----------
@@ -102,23 +98,3 @@ for config in configs.toLocalIterator():
                                                 FROM
                                                     current_customer_master_data FULL JOIN issued ON current_customer_master_data.contact_email = issued.email
                                            """)
-
-# COMMAND ----------
-
-# hotel_unique_email = spark.read.format("csv").option("header", True).load("/mnt/S3_mktg_prod_general/mktg/bima_playground/temp/customer_table/20171101.hotel_unique_email.csv")
-# package_unique_email = spark.read.format("csv").option("header", True).load("/mnt/S3_mktg_prod_general/mktg/bima_playground/temp/customer_table/20171101.package_unique_email.csv")
-
-# hotel_unique_email.write.parquet("/mnt/S3_mktg_prod_general/mktg/bima_playground/temp/customer_table/20171101.hotel_unique_email.pq")
-# package_unique_email.write.parquet("/mnt/S3_mktg_prod_general/mktg/bima_playground/temp/customer_table/20171101.package_unique_email.pq")
-
-# hotel_unique_email = spark.read.parquet("/mnt/S3_mktg_prod_general/mktg/bima_playground/temp/customer_table/20171101.hotel_unique_email.pq")
-# package_unique_email = spark.read.parquet("/mnt/S3_mktg_prod_general/mktg/bima_playground/temp/customer_table/20171101.package_unique_email.pq")
-
-# hotel_unique_email.createOrReplaceTempView("hotel_unique_email")
-# package_unique_email.createOrReplaceTempView("package_unique_email")
-
-# new_hotel_unique_email = spark.sql("""(SELECT *, "TVLK_PACKAGE" AS acquired_from FROM hotel_unique_email WHERE booking_id IN (SELECT booking_id FROM package_unique_email))
-# UNION
-# (SELECT *, "TVLK_HOTEL" AS acquired_from FROM hotel_unique_email WHERE booking_id NOT IN (SELECT booking_id FROM package_unique_email))""")
-
-# new_hotel_unique_email.coalesce(4).write.parquet("/mnt/S3_mktg_prod_general/mktg/bima_playground/temp/customer_table/hotel_unique_email.pq/snapshot_date=2017-11-01")
